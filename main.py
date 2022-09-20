@@ -56,6 +56,8 @@ class BeefaloWidget(QWidget, SettingInterface):
         self.delegate = WidgetDelegate(self.result_model, None)
         self.theme = {}
         self.instant = False
+        
+        self.clipboard_changed = False
 
         self.hotKeys = Hotkey(self.get_setting("hotkeys"))
         self.add_global_hotkey()
@@ -76,7 +78,12 @@ class BeefaloWidget(QWidget, SettingInterface):
 
         self.result_size = min(10, max(4, self.get_setting("result_size")))
         self.result_item_height = 0
-        self.init_ui()
+        self.init_ui()    
+        
+        QApplication.clipboard().dataChanged.connect(self.handle_clipboard_changed)
+    
+    def handle_clipboard_changed(self):
+        self.clipboard_changed=True    
 
     def play_media(self, media_content):
         self.player.setMedia(media_content)
@@ -248,6 +255,11 @@ class BeefaloWidget(QWidget, SettingInterface):
             self.setVisible(True)
             self.activateWindow()
             self.ws_input.setFocus()
+            
+            text=QApplication.clipboard().text()
+            if self.clipboard_changed and len(text)>0:
+                self.set_input_text(text)
+                self.clipboard_changed=False
 
     def change_screen(self):
         screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
