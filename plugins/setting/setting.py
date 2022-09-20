@@ -4,9 +4,9 @@ import os
 
 from PyQt5 import QtGui, QtCore, Qsci
 from PyQt5.QtCore import QSize, QModelIndex, Qt
-from PyQt5.QtGui import QIcon, QFont, QGuiApplication, QPixmap, QCursor
+from PyQt5.QtGui import QIcon, QFont, QGuiApplication, QPixmap, QCursor,QKeySequence
 from PyQt5.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QDesktopWidget, QHBoxLayout, QListWidget, QListWidgetItem, \
-    QWidget, QLabel, QGroupBox, QPushButton, QSpacerItem, QSizePolicy, QPlainTextEdit, QApplication
+    QWidget, QLabel, QGroupBox, QPushButton, QSpacerItem, QSizePolicy, QPlainTextEdit, QApplication,QShortcut
 from plugin_api import AbstractPlugin, ContextApi, PluginInfo, SettingInterface, get_logger
 from result_model import ResultItem, ResultAction, MenuItem
 
@@ -38,8 +38,8 @@ class PluginEditorWidget(QWidget):
         self.editor.setObjectName("Editor")
 
         button_group = QHBoxLayout()
-        self.save_btn = QPushButton("Save")
-        self.reset_btn = QPushButton("Reset")
+        self.save_btn = QPushButton("保存")
+        self.reset_btn = QPushButton("还原")
         button_group.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Expanding))
         button_group.addWidget(self.save_btn)
         button_group.addWidget(self.reset_btn)
@@ -147,7 +147,12 @@ class SettingDialog(QWidget):
         self.title_list.setObjectName("TitleList")
         self.editor_list.setObjectName("EditorList")
         self.setObjectName("SettingPanel")
+        
+        QShortcut(QKeySequence("Esc"), self, self.handle_escape)
 
+    def handle_escape(self):
+        self.close()
+        
     def show(self) -> None:
         with open(os.path.join(self.plugin_info.path, "resource", "theme.css"), "r",
                   encoding="UTF-8") as theme_template:
