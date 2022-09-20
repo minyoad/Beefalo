@@ -37,7 +37,7 @@ def search(name):
     
     for entry in entries:
         if "folderUri" in entry:
-            folder_uri=entry["folderUri"]
+            folder_uri=entry["folderUri"]            
 
             label=entry.get("label",folder_uri.split("/")[-1])
             title=label
@@ -55,6 +55,9 @@ def search(name):
                 continue
 
             action=wrapper(folder_uri)
-            results.append((title,folder_uri,action))
+            
+            # print("folder_uri: " + unquote(folder_uri))
+
+            results.append((title,unquote(folder_uri),action))
 
     return results

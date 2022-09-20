@@ -26,7 +26,7 @@ class ItemSize(object):
     def __init__(self, size_scale: SizeScale):
         s = size_scale
 
-        self.height = 48 * s.g
+        self.height = 52 * s.g
         self.width = 100 * s.g
 
         self.icon_size = (32 * s.g, 32 * s.g)
@@ -39,8 +39,8 @@ class ItemSize(object):
         self.title_margin = (self.height, 4 * s.g)
 
         # subtitle
-        self.sub_font_size = 12 * s.f
-        self.sub_title_height = 16 * s.g
+        self.sub_font_size = 14 * s.f
+        self.sub_title_height = 18 * s.g
 
         # menu drop icon
         self.drop_size = (24 * s.g, 24 * s.g)
