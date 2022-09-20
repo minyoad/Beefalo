@@ -230,7 +230,13 @@ class BeefaloWidget(QWidget, SettingInterface):
         QShortcut(QKeySequence("Down"), self, self.selected_down)
         QShortcut(QKeySequence("PgUp"), self, self.selected_page_up)
         QShortcut(QKeySequence("PgDown"), self, self.selected_page_down)
-        QShortcut(QKeySequence("Esc"), self, self.change_visible)
+        QShortcut(QKeySequence("Esc"), self, self.handle_escape)
+
+    def handle_escape(self):
+        if self.ws_input.isVisible() and self.ws_input.text().__len__()!=0:
+            self.set_input_text('')
+        else:
+            self.change_visible()
 
     def change_visible(self, keep=False):
         if self.isVisible():

@@ -55,6 +55,6 @@ def search(name):
                 continue
 
             action=wrapper(folder_uri)
-            results.append((title,sub_title,action))
+            results.append((title,folder_uri,action))
 
     return results
