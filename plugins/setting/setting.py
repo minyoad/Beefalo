@@ -2,7 +2,7 @@ import inspect
 import json
 import os
 
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, Qsci
 from PyQt5.QtCore import QSize, QModelIndex, Qt
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication, QPixmap, QCursor
 from PyQt5.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QDesktopWidget, QHBoxLayout, QListWidget, QListWidgetItem, \
@@ -12,7 +12,12 @@ from result_model import ResultItem, ResultAction, MenuItem
 
 log = get_logger("Setting")
 
-
+class JSONEditor(Qsci.QsciScintilla):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setLexer(Qsci.QsciLexerJSON(self))
+        # self.setText(JSON)
+        
 class PluginEditorWidget(QWidget):
     def __init__(self, plugin: SettingInterface and AbstractPlugin, api: ContextApi):
         super(QWidget, self).__init__()
@@ -26,7 +31,7 @@ class PluginEditorWidget(QWidget):
         self.label.setFont(font)
         self.label.setObjectName("Title")
 
-        self.editor = QPlainTextEdit()
+        self.editor = JSONEditor()
         font = QFont()
         font.setFamilies(["Consolas"])
         self.editor.setFont(font)
@@ -56,15 +61,15 @@ class PluginEditorWidget(QWidget):
 
     def load_setting(self):
         with open(self.plugin.setting_path, encoding="utf-8") as setting_file:
-            self.editor.setPlainText(setting_file.read())
+            self.editor.setText(setting_file.read())
 
     def save_setting(self):
         try:
-            json.loads(self.editor.toPlainText())
+            json.loads(self.editor.text())
         except:
             return
         with open(self.plugin.setting_path, "w", encoding="utf-8") as setting_file:
-            setting_file.write(self.editor.toPlainText())
+            setting_file.write(self.editor.text())
         self.plugin.reload()
 
     def change_size(self):

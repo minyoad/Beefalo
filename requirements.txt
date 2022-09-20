@@ -16,6 +16,7 @@ PyQt5-stubs
 PySocks
 pywin32
 PyYAML
+qscintilla
 qrcode
 requests
 setuptools
